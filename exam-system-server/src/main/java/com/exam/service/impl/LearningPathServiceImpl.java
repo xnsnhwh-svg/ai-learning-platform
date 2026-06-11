@@ -101,8 +101,10 @@ public class LearningPathServiceImpl implements LearningPathService {
                                 .filter(kp -> nodeKpIds.contains(kp.getId()))
                                 .collect(Collectors.toList());
                         node.setKnowledgePoints(nodeKps);
+                        node.setKnowledgePointIds(nodeKpIds);
                     } else {
                         node.setKnowledgePoints(new ArrayList<>());
+                        node.setKnowledgePointIds(new ArrayList<>());
                     }
                 }
             }

@@ -1,6 +1,7 @@
 package com.exam.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
@@ -17,9 +18,10 @@ import java.util.stream.Collectors;
  * 封装RedisTemplate操作，提供更便捷的API
  */
 @Component
+@ConditionalOnBean(RedisTemplate.class)
 public class RedisUtils {
 
-    @Autowired
+    @Autowired(required = false)
     private RedisTemplate<String, Object> redisTemplate;
 
     /**

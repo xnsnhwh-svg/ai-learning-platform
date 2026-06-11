@@ -37,7 +37,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     private QuestionChoiceMapper questionChoiceMapper;
     @Autowired
     private QuestionAnswerMapper questionAnswerMapper;
-    @Autowired
+    @Autowired(required = false)
     private RedisUtils redisUtils;
     
     /**
