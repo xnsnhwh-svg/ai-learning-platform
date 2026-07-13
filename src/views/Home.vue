@@ -1,31 +1,31 @@
-<template>
+﻿<template>
   <div class="dashboard">
-    <!-- 背景装饰 -->
+    <!-- 鑳屾櫙瑁呴グ -->
     <div class="bg-decoration">
       <div class="bg-blob blob-1"></div>
       <div class="bg-blob blob-2"></div>
       <div class="bg-blob blob-3"></div>
     </div>
 
-    <!-- 欢迎区域 -->
+    <!-- 娆㈣繋鍖哄煙 -->
     <section class="welcome-section animate-fade-in">
       <div class="welcome-content">
         <h1 class="welcome-title">
-          欢迎回来，<span class="text-gradient">学习者</span>
+          娆㈣繋鍥炴潵锛?span class="text-gradient">瀛︿範鑰?/span>
         </h1>
-        <p class="welcome-subtitle">继续你的学习旅程，探索AI驱动的个性化学习体验</p>
+        <p class="welcome-subtitle">缁х画浣犵殑瀛︿範鏃呯▼锛屾帰绱I椹卞姩鐨勪釜鎬у寲瀛︿範浣撻獙</p>
         <div class="welcome-stats">
           <div class="welcome-stat">
             <span class="stat-num">{{ stats.sessions }}</span>
-            <span class="stat-text">次对话</span>
+            <span class="stat-text">娆″璇?/span>
           </div>
           <div class="welcome-stat">
             <span class="stat-num">{{ stats.paths }}</span>
-            <span class="stat-text">条路径</span>
+            <span class="stat-text">鏉¤矾寰?/span>
           </div>
           <div class="welcome-stat">
             <span class="stat-num">{{ stats.resources }}</span>
-            <span class="stat-text">份资源</span>
+            <span class="stat-text">浠借祫婧?/span>
           </div>
         </div>
       </div>
@@ -36,7 +36,7 @@
       </div>
     </section>
 
-    <!-- 统计卡片 -->
+    <!-- 缁熻鍗＄墖 -->
     <section class="stats-section">
       <div class="stat-card glass-card animate-fade-in" style="animation-delay: 0.1s">
         <div class="stat-icon" style="background: linear-gradient(135deg, #0071e3, #00c6fb)">
@@ -44,10 +44,10 @@
         </div>
         <div class="stat-info">
           <span class="stat-value">{{ stats.sessions }}</span>
-          <span class="stat-label">对话次数</span>
+          <span class="stat-label">瀵硅瘽娆℃暟</span>
         </div>
         <div class="stat-trend up">
-          <el-icon><Top /></el-icon> 活跃
+          <el-icon><Top /></el-icon> 娲昏穬
         </div>
       </div>
 
@@ -57,11 +57,10 @@
         </div>
         <div class="stat-info">
           <span class="stat-value">{{ stats.paths }}</span>
-          <span class="stat-label">学习路径</span>
+          <span class="stat-label">瀛︿範璺緞</span>
         </div>
         <div class="stat-trend up">
-          <el-icon><Top /></el-icon> 进行中
-        </div>
+          <el-icon><Top /></el-icon> 杩涜涓?        </div>
       </div>
 
       <div class="stat-card glass-card animate-fade-in" style="animation-delay: 0.3s">
@@ -70,10 +69,10 @@
         </div>
         <div class="stat-info">
           <span class="stat-value">{{ stats.videos }}</span>
-          <span class="stat-label">视频课程</span>
+          <span class="stat-label">瑙嗛璇剧▼</span>
         </div>
         <div class="stat-trend">
-          <el-icon><VideoCamera /></el-icon> 可用
+          <el-icon><VideoCamera /></el-icon> 鍙敤
         </div>
       </div>
 
@@ -83,17 +82,16 @@
         </div>
         <div class="stat-info">
           <span class="stat-value">{{ stats.resources }}</span>
-          <span class="stat-label">学习资源</span>
+          <span class="stat-label">瀛︿範璧勬簮</span>
         </div>
         <div class="stat-trend">
-          <el-icon><Document /></el-icon> 已生成
-        </div>
+          <el-icon><Document /></el-icon> 宸茬敓鎴?        </div>
       </div>
     </section>
 
-    <!-- 快速入口 -->
+    <!-- 蹇€熷叆鍙?-->
     <section class="quick-actions">
-      <h2 class="section-title">快速开始</h2>
+      <h2 class="section-title">蹇€熷紑濮?/h2>
       <div class="actions-grid">
         <div
           v-for="(action, idx) in quickActions"
@@ -114,9 +112,9 @@
       </div>
     </section>
 
-    <!-- 最近学习 -->
+    <!-- 鏈€杩戝涔?-->
     <section class="recent-section">
-      <h2 class="section-title">最近学习</h2>
+      <h2 class="section-title">鏈€杩戝涔?/h2>
       <div class="recent-list">
         <div
           v-for="(item, idx) in recentItems"
@@ -168,29 +166,29 @@ const stats = ref({
 
 const quickActions = [
   {
-    title: 'AI学习助手',
-    description: '通过对话了解你的学习水平，生成个性化学习路径',
+    title: 'AI瀛︿範鍔╂墜',
+    description: '閫氳繃瀵硅瘽浜嗚В浣犵殑瀛︿範姘村钩锛岀敓鎴愪釜鎬у寲瀛︿範璺緞',
     icon: Cpu,
     gradient: 'linear-gradient(135deg, #0071e3, #00c6fb)',
     path: '/agent-chat'
   },
   {
-    title: '学习路径',
-    description: '查看AI为你规划的个性化学习路径',
+    title: '瀛︿範璺緞',
+    description: '鏌ョ湅AI涓轰綘瑙勫垝鐨勪釜鎬у寲瀛︿範璺緞',
     icon: Collection,
     gradient: 'linear-gradient(135deg, #34c759, #30d15c)',
     path: '/learning-paths'
   },
   {
-    title: '视频学习',
-    description: '浏览精选视频课程，高效学习',
+    title: '瑙嗛瀛︿範',
+    description: '娴忚绮鹃€夎棰戣绋嬶紝楂樻晥瀛︿範',
     icon: VideoCamera,
     gradient: 'linear-gradient(135deg, #ff9500, #ff6b00)',
     path: '/videos'
   },
   {
-    title: '学习资源',
-    description: '查看生成的文档、练习题和思维导图',
+    title: '瀛︿範璧勬簮',
+    description: '鏌ョ湅鐢熸垚鐨勬枃妗ｃ€佺粌涔犻鍜屾€濈淮瀵煎浘',
     icon: Reading,
     gradient: 'linear-gradient(135deg, #af52de, #5856d6)',
     path: '/resources'
@@ -201,72 +199,65 @@ const recentItems = ref([])
 
 async function loadStats() {
   try {
-    // 加载会话数
-    const sessions = await fetchSessions(store.userId)
+    // 鍔犺浇浼氳瘽鏁?    const sessions = await fetchSessions(store.userId)
     stats.value.sessions = sessions?.length || 0
 
-    // 加载路径数
-    const paths = await fetchLearningPathsByUser(store.userId)
+    // 鍔犺浇璺緞鏁?    const paths = await fetchLearningPathsByUser(store.userId)
     stats.value.paths = paths?.length || 0
 
-    // 加载视频数
-    try {
+    // 鍔犺浇瑙嗛鏁?    try {
       const videoRes = await request.get('/api/videos', { params: { page: 1, size: 1 } })
       stats.value.videos = videoRes.data?.total || 5
     } catch {
       stats.value.videos = 5
     }
 
-    // 加载资源数
-    stats.value.resources = 21 // 预存资源数
-
-    // 更新最近学习
-    updateRecentItems(sessions, paths)
+    // 鍔犺浇璧勬簮鏁?    stats.value.resources = 21 // 棰勫瓨璧勬簮鏁?
+    // 鏇存柊鏈€杩戝涔?    updateRecentItems(sessions, paths)
   } catch (e) {
-    console.error('加载统计数据失败:', e)
+    console.error('鍔犺浇缁熻鏁版嵁澶辫触:', e)
   }
 }
 
 function updateRecentItems(sessions, paths) {
   const items = []
 
-  // 添加最近的路径
+  // 娣诲姞鏈€杩戠殑璺緞
   if (paths && paths.length > 0) {
     const latestPath = paths[0]
     items.push({
-      title: latestPath.title || '学习路径 #' + latestPath.id,
-      meta: `学习路径 · ${latestPath.nodeCount || 0}个节点`,
+      title: latestPath.title || '瀛︿範璺緞 #' + latestPath.id,
+      meta: `瀛︿範璺緞 路 ${latestPath.nodeCount || 0}涓妭鐐筦,
       icon: Guide,
       gradient: 'linear-gradient(135deg, #0071e3, #00c6fb)',
       path: '/learning-paths',
-      tag: latestPath.status === 'completed' ? '已完成' : '进行中',
+      tag: latestPath.status === 'completed' ? '宸插畬鎴? : '杩涜涓?,
       tagType: latestPath.status === 'completed' ? 'success' : 'primary'
     })
   }
 
-  // 添加最近的对话
+  // 娣诲姞鏈€杩戠殑瀵硅瘽
   if (sessions && sessions.length > 0) {
     const latestSession = sessions[0]
     items.push({
-      title: latestSession.title || 'AI对话 #' + latestSession.id,
-      meta: '最近对话',
+      title: latestSession.title || 'AI瀵硅瘽 #' + latestSession.id,
+      meta: '鏈€杩戝璇?,
       icon: ChatDotRound,
       gradient: 'linear-gradient(135deg, #34c759, #30d15c)',
       path: '/agent-chat',
-      tag: latestSession.status === 'completed' ? '已完成' : '继续',
+      tag: latestSession.status === 'completed' ? '宸插畬鎴? : '缁х画',
       tagType: latestSession.status === 'completed' ? 'success' : 'primary'
     })
   }
 
-  // 默认项
-  if (items.length === 0) {
+  // 榛樿椤?  if (items.length === 0) {
     items.push({
-      title: '开始学习',
-      meta: '点击开始你的学习之旅',
+      title: '寮€濮嬪涔?,
+      meta: '鐐瑰嚮寮€濮嬩綘鐨勫涔犱箣鏃?,
       icon: Cpu,
       gradient: 'linear-gradient(135deg, #0071e3, #00c6fb)',
       path: '/agent-chat',
-      tag: '开始',
+      tag: '寮€濮?,
       tagType: 'primary'
     })
   }
@@ -287,7 +278,7 @@ onMounted(() => {
   position: relative;
 }
 
-/* ========== 背景装饰 ========== */
+/* ========== 鑳屾櫙瑁呴グ ========== */
 .bg-decoration {
   position: fixed;
   top: 0;
@@ -341,7 +332,7 @@ onMounted(() => {
   75% { transform: translate(20px, 10px) scale(1.02); }
 }
 
-/* ========== 欢迎区域 ========== */
+/* ========== 娆㈣繋鍖哄煙 ========== */
 .welcome-section {
   background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(22, 33, 62, 0.9) 50%, rgba(15, 52, 96, 0.9) 100%);
   backdrop-filter: blur(20px);
@@ -437,7 +428,7 @@ onMounted(() => {
   50% { transform: translateY(-20px) scale(1.05); }
 }
 
-/* ========== 统计卡片 ========== */
+/* ========== 缁熻鍗＄墖 ========== */
 .stats-section {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -504,7 +495,7 @@ onMounted(() => {
   background: rgba(52, 199, 89, 0.1);
 }
 
-/* ========== 快速入口 ========== */
+/* ========== 蹇€熷叆鍙?========== */
 .section-title {
   font-size: 22px;
   font-weight: 600;
@@ -578,7 +569,7 @@ onMounted(() => {
   transform: translateX(4px);
 }
 
-/* ========== 最近学习 ========== */
+/* ========== 鏈€杩戝涔?========== */
 .recent-list {
   display: flex;
   flex-direction: column;
@@ -627,7 +618,7 @@ onMounted(() => {
   color: var(--apple-text-secondary);
 }
 
-/* ========== 响应式 ========== */
+/* ========== 鍝嶅簲寮?========== */
 @media (max-width: 1200px) {
   .stats-section,
   .actions-grid {

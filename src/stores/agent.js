@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+﻿import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
 export const useAgentStore = defineStore('agent', () => {
@@ -17,12 +17,12 @@ export const useAgentStore = defineStore('agent', () => {
 
   const phaseLabel = computed(() => {
     const map = {
-      orchestrating: '正在分析您的需求...',
-      profiling: '正在了解您的学习情况...',
-      planning: '正在为您规划学习路径...',
-      generating: '正在生成学习资料...',
-      synthesizing: '正在整理学习计划...',
-      done: '学习计划已生成'
+      orchestrating: '姝ｅ湪鍒嗘瀽鎮ㄧ殑闇€姹?..',
+      profiling: '姝ｅ湪浜嗚В鎮ㄧ殑瀛︿範鎯呭喌...',
+      planning: '姝ｅ湪涓烘偍瑙勫垝瀛︿範璺緞...',
+      generating: '姝ｅ湪鐢熸垚瀛︿範璧勬枡...',
+      synthesizing: '姝ｅ湪鏁寸悊瀛︿範璁″垝...',
+      done: '瀛︿範璁″垝宸茬敓鎴?
     }
     return map[currentPhase.value] || ''
   })

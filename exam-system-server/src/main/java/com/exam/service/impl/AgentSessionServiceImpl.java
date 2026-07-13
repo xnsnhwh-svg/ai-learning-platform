@@ -82,4 +82,9 @@ public class AgentSessionServiceImpl implements AgentSessionService {
     public List<AgentMessage> getMessagesBySessionAndPhase(Long sessionId, String phase) {
         return agentMessageMapper.selectBySessionIdAndPhase(sessionId, phase);
     }
+
+    @Override
+    public AgentSession getSessionById(Long sessionId) {
+        return agentSessionMapper.selectById(sessionId);
+    }
 }

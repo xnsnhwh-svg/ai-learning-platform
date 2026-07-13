@@ -2,6 +2,7 @@ package com.exam.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.exam.entity.Question;
+import com.exam.entity.QuestionAnswer;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Results;
@@ -18,6 +19,9 @@ import java.util.Map;
 public interface QuestionMapper extends BaseMapper<Question> {
     // 可以在这里添加自定义的查询方法
     
+    @Select("SELECT * FROM question_answers WHERE question_id = #{questionId}")
+    QuestionAnswer selectAnswerByQuestionId(Long questionId);
+
     /**
      * 获取每个分类的题目数量
      * @return 包含分类ID和题目数量的结果列表

@@ -45,6 +45,18 @@ public class PathNode {
     @Schema(description = "安排此节点的原因（AI生成）", example = "这是面向对象的基础，需要先掌握")
     private String reason;
 
+    @Schema(description = "学习目标（AI生成）", example = "掌握Python列表的创建、索引、切片和常用方法")
+    private String learningObjectives;
+
+    @Schema(description = "教学内容大纲（AI生成，分步骤）", example = "1. 列表的创建\n2. 索引访问\n3. 切片操作\n4. 常见方法")
+    private String contentOutline;
+
+    @Schema(description = "代码示例（AI生成）", example = "fruits = ['apple', 'banana', 'cherry']\nprint(fruits[0])")
+    private String codeExample;
+
+    @Schema(description = "练习任务（AI生成）", example = "创建一个包含10个学生成绩的列表，计算平均分")
+    private String practiceTask;
+
     @Schema(description = "状态：pending-待开始，in_progress-进行中，completed-已完成", example = "pending")
     private String status;
 

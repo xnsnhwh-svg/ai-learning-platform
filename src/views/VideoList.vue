@@ -1,5 +1,5 @@
 <template>
-  <div class="video-list-page">
+  <div class="video-list-page page-enter">
     <!-- 优化后的页面头部 -->
     <div class="page-header">
       <div class="header-main">
@@ -322,91 +322,20 @@ const changeSortType = (newSortType) => {
 </script>
 
 <style scoped>
-.video-list-page {
-  min-height: 100vh;
-  background: #f5f7fa;
-}
+.video-list-page { min-height: 100vh; background: var(--bg-page); }
 
-/* 页面头部样式 */
-.page-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  text-align: center;
-  padding: 30px 20px;
-  position: relative;
-}
+.page-header { background: linear-gradient(135deg, #5B7B8A 0%, #4A6572 100%); color: white; text-align: center; padding: var(--space-xl) var(--space-lg); }
+.header-main { max-width: var(--content-max); margin: 0 auto; padding: 0 var(--space-lg); }
+.title-section { display: flex; align-items: center; justify-content: center; gap: var(--space-md); margin-bottom: var(--space-xs); }
+.page-title { font-size: var(--fs-3xl); font-weight: var(--fw-bold); margin: 0; }
+.page-title .el-icon { margin-right: var(--space-sm); font-size: 36px; }
+.page-desc { font-size: var(--fs-base); opacity: 0.9; margin: 0; }
 
-.header-main {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.title-section {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin-bottom: 8px;
-}
-
-.page-title {
-  font-size: 36px;
-  font-weight: 700;
-  margin: 0;
-}
-
-.page-title .el-icon {
-  margin-right: 12px;
-  font-size: 36px;
-}
-
-.page-desc {
-  font-size: 16px;
-  opacity: 0.9;
-  margin: 0;
-}
-
-/* 分类导航样式 */
-.category-nav {
-  background: white;
-  border-bottom: 1px solid #e4e7ed;
-  padding: 12px 0;
-  overflow-x: auto;
-}
-
-.category-list {
-  display: flex;
-  gap: 8px;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  min-width: max-content;
-}
-
-.category-item {
-  padding: 8px 16px;
-  border-radius: 20px;
-  background: #f5f7fa;
-  color: #606266;
-  cursor: pointer;
-  transition: all 0.3s;
-  white-space: nowrap;
-  font-size: 14px;
-  border: 1px solid transparent;
-}
-
-.category-item:hover {
-  background: #ecf5ff;
-  color: #409eff;
-  border-color: #409eff;
-}
-
-.category-item.active {
-  background: #409eff;
-  color: white;
-  border-color: #409eff;
-}
+.category-nav { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: var(--space-sm) 0; overflow-x: auto; }
+.category-list { display: flex; gap: var(--space-xs); max-width: var(--content-max); margin: 0 auto; padding: 0 var(--space-lg); min-width: max-content; }
+.category-item { padding: var(--space-xs) var(--space-md); border-radius: var(--radius-full); background: var(--bg-subtle); color: var(--text-secondary); cursor: pointer; transition: all var(--t-fast); white-space: nowrap; font-size: var(--fs-base); border: 1px solid transparent; }
+.category-item:hover { background: var(--bg-active); color: var(--primary); border-color: var(--primary); }
+.category-item.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
 .category-name {
   font-weight: 500;

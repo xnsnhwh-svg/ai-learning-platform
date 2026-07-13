@@ -66,6 +66,15 @@ kimi:
     max-tokens: 2000  # 最大生成token数
     temperature: 0.3  # 较低的temperature确保判卷结果稳定
 
+# DeepSeek 大模型配置（多智能体引擎使用）
+deepseek:
+  api:
+    base-url: https://api.deepseek.com/v1
+    api-key: sk-3a75eafe42a2425c8c5f03400d437182
+    model: deepseek-chat
+    max-tokens: 4096
+    temperature: 0.7
+
 # MinIO 文件存储配置  # MinIO对象存储配置
 minio:
   endpoint: http://localhost:9000  # MinIO服务器地址
@@ -80,9 +89,16 @@ minio:
 #     path: ./uploads/  # 本地文件存储路径
 #     url-prefix: http://localhost:8080/files/  # 文件访问URL前缀
 
+<<<<<<< HEAD
 # Agent配置
 agent:
   mode: multi  # legacy=旧单体模式, multi=新多Agent模式（默认）
+=======
+# JWT配置
+jwt:
+  secret: smart-learning-platform-jwt-secret-key-2026
+  expiration: 86400000
+>>>>>>> 4fd03ff (feat: multi-agent learning platform with RAG, knowledge graph, exam module, anti-AI design system)
 
 # Knife4j API文档配置  # 增强版API文档配置
 knife4j:

@@ -25,4 +25,10 @@ public interface LearningPathMapper extends BaseMapper<LearningPath> {
      */
     @Select("SELECT * FROM learning_path WHERE user_id = #{userId} AND course_id = #{courseId} AND status = 'active' LIMIT 1")
     LearningPath selectActiveByUserAndCourse(@Param("userId") Long userId, @Param("courseId") Long courseId);
+
+    /**
+     * 根据会话ID获取学习路径
+     */
+    @Select("SELECT * FROM learning_path WHERE session_id = #{sessionId} ORDER BY created_at DESC LIMIT 1")
+    LearningPath selectBySessionId(@Param("sessionId") Long sessionId);
 }

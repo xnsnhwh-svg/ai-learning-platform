@@ -1,14 +1,14 @@
 package com.exam.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.exam.entity.GeneratedResource;
 import com.exam.entity.KnowledgePoint;
 import com.exam.entity.LearningPath;
 import com.exam.entity.PathNode;
 import com.exam.entity.PathNodeKp;
+import com.exam.mapper.GeneratedResourceMapper;
 import com.exam.mapper.KnowledgePointMapper;
 import com.exam.mapper.LearningPathMapper;
-import com.exam.entity.GeneratedResource;
-import com.exam.mapper.GeneratedResourceMapper;
 import com.exam.mapper.PathNodeMapper;
 import com.exam.mapper.PathNodeKpMapper;
 import com.exam.service.LearningPathService;
@@ -75,7 +75,6 @@ public class LearningPathServiceImpl implements LearningPathService {
 
         // 获取路径节点
         List<PathNode> nodes = pathNodeMapper.selectByPathId(pathId);
-
         // 收集所有节点 ID
         List<Long> nodeIds = nodes.stream().map(PathNode::getId).collect(Collectors.toList());
 
@@ -128,6 +127,13 @@ public class LearningPathServiceImpl implements LearningPathService {
             }
         }
 
+        // 填充 knowledgePointIds 给前端使用
+        for (PathNode node : nodes) {
+            if (node.getKnowledgePoints() != null) {
+                node.setKnowledgePointIds(node.getKnowledgePoints().stream()
+                        .map(KnowledgePoint::getId).collect(Collectors.toList()));
+            }
+        }
         path.setNodes(nodes);
         path.setNodeCount(nodes.size());
 
@@ -138,6 +144,11 @@ public class LearningPathServiceImpl implements LearningPathService {
         path.setCompletedNodeCount((int) completedCount);
 
         return path;
+    }
+
+    @Override
+    public LearningPath getLearningPathBySession(Long sessionId) {
+        return learningPathMapper.selectBySessionId(sessionId);
     }
 
     @Override

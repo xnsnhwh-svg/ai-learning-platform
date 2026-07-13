@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+﻿import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
@@ -7,18 +7,18 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import App from './App.vue'
 import router from './router'
 
-// 创建Vue应用实例
+// 鍒涘缓Vue搴旂敤瀹炰緥
 const app = createApp(App)
 
-// 注册Element Plus图标
+// 娉ㄥ唽Element Plus鍥炬爣
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
 
-// 使用插件
-app.use(createPinia()) // 状态管理
-app.use(router) // 路由
-app.use(ElementPlus) // UI组件库
+// 浣跨敤鎻掍欢
+app.use(createPinia()) // 鐘舵€佺鐞?
+app.use(router) // 璺敱
+app.use(ElementPlus) // UI缁勪欢搴?
 
-// 挂载应用
+// 鎸傝浇搴旂敤
 app.mount('#app') 

@@ -1,49 +1,42 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import router from '../router'
 
-// 创建axios实例
 const request = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,  // 替换为实际服务器IP+后端端口
-  timeout: 100000, // 请求超时时间
-  headers: {
-    'Content-Type': 'application/json'
-  }
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  timeout: 100000,
+  headers: { 'Content-Type': 'application/json' }
 })
 
-// 请求拦截器
-request.interceptors.request.use(
-  config => {
-    // 在发送请求之前做些什么
-    console.log('发送请求:', config.url)
-    return config
-  },
-  error => {
-    // 对请求错误做些什么
-    console.error('请求错误:', error)
-    return Promise.reject(error)
+request.interceptors.request.use(config => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = token
   }
-)
+  return config
+})
 
-// 响应拦截器
 request.interceptors.response.use(
   response => {
-    // 对响应数据做点什么
     const res = response.data
-    
-    // 如果返回的状态码不是200，说明接口有问题，应该提示错误
     if (res.code !== 200) {
-      ElMessage.error(res.message || '请求失败')
       return Promise.reject(new Error(res.message || '请求失败'))
     }
-    
     return res
   },
   error => {
-    // 对响应错误做点什么
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('userId')
+      localStorage.removeItem('username')
+      localStorage.removeItem('realName')
+      router.push('/login')
+      return Promise.reject(error)
+    }
     console.error('响应错误:', error)
     ElMessage.error(error.message || '网络错误')
     return Promise.reject(error)
   }
 )
 
-export default request 
+export default request

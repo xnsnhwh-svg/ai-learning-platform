@@ -57,6 +57,7 @@ public class User {
     @Schema(description = "用户状态", 
             example = "ACTIVE", 
             allowableValues = {"ACTIVE", "INACTIVE"})
+    @TableField(exist = false)
     private String status;
     
     @Schema(description = "用户创建时间", 

@@ -35,7 +35,11 @@ public class SessionController {
     @Operation(summary = "获取会话详情", description = "获取指定会话的详细信息")
     public Result<AgentSession> getSessionById(
             @Parameter(description = "会话ID") @PathVariable Long sessionId) {
-        return Result.success(agentSessionService.getSessionById(sessionId));
+        AgentSession session = agentSessionService.getSessionById(sessionId);
+        if (session == null) {
+            return Result.error("会话不存在");
+        }
+        return Result.success(session);
     }
 
     @GetMapping("/sessions/{sessionId}/messages")

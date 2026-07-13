@@ -1,5 +1,5 @@
 <template>
-  <div class="category-manage-container">
+  <div class="category-manage-container page-enter">
     <div class="tips-section">
       <el-alert
         title="操作提示"

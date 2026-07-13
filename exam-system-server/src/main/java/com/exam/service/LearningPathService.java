@@ -54,4 +54,9 @@ public interface LearningPathService {
      * 根据节点ID获取节点信息
      */
     PathNode getPathNodeById(Long nodeId);
+
+    /**
+     * 根据会话ID获取学习路径
+     */
+    LearningPath getLearningPathBySession(Long sessionId);
 }

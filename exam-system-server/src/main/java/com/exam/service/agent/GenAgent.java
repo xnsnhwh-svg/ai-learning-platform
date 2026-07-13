@@ -1,4 +1,4 @@
-package com.exam.service.agent;
+﻿package com.exam.service.agent;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -18,9 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 资源生成Agent
- * 负责根据知识点生成学习资源（文档、练习题、思维导图）
- * 优先使用预存的资源，没有再调LLM生成
+ * 璧勬簮鐢熸垚Agent
+ * 璐熻矗鏍规嵁鐭ヨ瘑鐐圭敓鎴愬涔犺祫婧愶紙鏂囨。銆佺粌涔犻銆佹€濈淮瀵煎浘锛? * 浼樺厛浣跨敤棰勫瓨鐨勮祫婧愶紝娌℃湁鍐嶈皟LLM鐢熸垚
  */
 @Component
 public class GenAgent implements LearningAgent {
@@ -35,10 +34,10 @@ public class GenAgent implements LearningAgent {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String SYSTEM_PROMPT = "你是学习资源生成助手。根据要求生成学习资料。\n" +
-            "文档：{\"type\":\"document\",\"title\":\"标题\",\"content\":\"# 标题\\n\\nMarkdown内容\"}\n" +
-            "练习题：{\"type\":\"quiz\",\"title\":\"标题\",\"content\":{\"questions\":[{\"content\":\"题目\",\"type\":\"CHOICE\",\"difficulty\":\"EASY\",\"options\":[{\"content\":\"A\",\"isCorrect\":true}],\"analysis\":\"解析\"}]}}\n" +
-            "思维导图：{\"type\":\"mindmap\",\"title\":\"标题\",\"content\":{\"topic\":\"主题\",\"children\":[{\"topic\":\"子主题\"}]}}";
+    private static final String SYSTEM_PROMPT = "浣犳槸瀛︿範璧勬簮鐢熸垚鍔╂墜銆傛牴鎹姹傜敓鎴愬涔犺祫鏂欍€俓n" +
+            "鏂囨。锛歿\"type\":\"document\",\"title\":\"鏍囬\",\"content\":\"# 鏍囬\\n\\nMarkdown鍐呭\"}\n" +
+            "缁冧範棰橈細{\"type\":\"quiz\",\"title\":\"鏍囬\",\"content\":{\"questions\":[{\"content\":\"棰樼洰\",\"type\":\"CHOICE\",\"difficulty\":\"EASY\",\"options\":[{\"content\":\"A\",\"isCorrect\":true}],\"analysis\":\"瑙ｆ瀽\"}]}}\n" +
+            "鎬濈淮瀵煎浘锛歿\"type\":\"mindmap\",\"title\":\"鏍囬\",\"content\":{\"topic\":\"涓婚\",\"children\":[{\"topic\":\"瀛愪富棰榎"}]}}";
 
     @Override
     public String getRole() {
@@ -66,8 +65,8 @@ public class GenAgent implements LearningAgent {
             try {
                 structuredData = objectMapper.readTree(jsonStr);
             } catch (Exception jsonEx) {
-                log.warn("JSON解析失败，尝试构建默认资源: {}", jsonEx.getMessage());
-                // 构建默认资源
+                log.warn("JSON瑙ｆ瀽澶辫触锛屽皾璇曟瀯寤洪粯璁よ祫婧? {}", jsonEx.getMessage());
+                // 鏋勫缓榛樿璧勬簮
                 structuredData = buildDefaultResource(input.getUserMessage(), jsonStr);
             }
 
@@ -83,58 +82,58 @@ public class GenAgent implements LearningAgent {
             AgentOutput output = new AgentOutput();
             output.setAgentRole(getRole());
             output.setStatus("error");
-            output.setRawResponse("资源生成失败: " + e.getMessage());
+            output.setRawResponse("璧勬簮鐢熸垚澶辫触: " + e.getMessage());
             return output;
         }
     }
 
     /**
-     * 当JSON解析失败时，构建默认资源
+     * 褰揓SON瑙ｆ瀽澶辫触鏃讹紝鏋勫缓榛樿璧勬簮
      */
     private JsonNode buildDefaultResource(String prompt, String rawText) {
         try {
-            // 根据prompt判断资源类型
-            if (prompt.contains("练习题") || prompt.contains("quiz")) {
+            // 鏍规嵁prompt鍒ゆ柇璧勬簮绫诲瀷
+            if (prompt.contains("缁冧範棰?) || prompt.contains("quiz")) {
                 JSONObject quiz = new JSONObject();
-                quiz.put("title", "练习题");
+                quiz.put("title", "缁冧範棰?);
                 quiz.put("type", "quiz");
                 JSONObject content = new JSONObject();
                 JSONArray questions = new JSONArray();
                 JSONObject q1 = new JSONObject();
-                q1.put("content", "关于这个知识点，以下说法正确的是？");
+                q1.put("content", "鍏充簬杩欎釜鐭ヨ瘑鐐癸紝浠ヤ笅璇存硶姝ｇ‘鐨勬槸锛?);
                 q1.put("type", "CHOICE");
                 q1.put("difficulty", "EASY");
                 JSONArray options = new JSONArray();
-                options.add(new JSONObject() {{ put("content", "选项A"); put("isCorrect", true); }});
-                options.add(new JSONObject() {{ put("content", "选项B"); put("isCorrect", false); }});
+                options.add(new JSONObject() {{ put("content", "閫夐」A"); put("isCorrect", true); }});
+                options.add(new JSONObject() {{ put("content", "閫夐」B"); put("isCorrect", false); }});
                 q1.put("options", options);
-                q1.put("analysis", "请根据实际内容选择正确答案");
+                q1.put("analysis", "璇锋牴鎹疄闄呭唴瀹归€夋嫨姝ｇ‘绛旀");
                 questions.add(q1);
                 content.put("questions", questions);
                 quiz.put("content", content);
                 return objectMapper.readTree(quiz.toJSONString());
-            } else if (prompt.contains("思维导图") || prompt.contains("mindmap")) {
+            } else if (prompt.contains("鎬濈淮瀵煎浘") || prompt.contains("mindmap")) {
                 JSONObject mindmap = new JSONObject();
-                mindmap.put("title", "思维导图");
+                mindmap.put("title", "鎬濈淮瀵煎浘");
                 mindmap.put("type", "mindmap");
                 JSONObject content = new JSONObject();
-                content.put("topic", "知识点");
+                content.put("topic", "鐭ヨ瘑鐐?);
                 content.put("children", new JSONArray());
                 mindmap.put("content", content);
                 return objectMapper.readTree(mindmap.toJSONString());
             } else {
-                // 默认文档
+                // 榛樿鏂囨。
                 JSONObject doc = new JSONObject();
-                doc.put("title", "学习文档");
+                doc.put("title", "瀛︿範鏂囨。");
                 doc.put("type", "document");
                 doc.put("content", rawText.length() > 500 ? rawText.substring(0, 500) + "..." : rawText);
                 return objectMapper.readTree(doc.toJSONString());
             }
         } catch (Exception e) {
             log.error("Failed to build default resource", e);
-            // 返回最基本的JSON
+            // 杩斿洖鏈€鍩烘湰鐨凧SON
             try {
-                return objectMapper.readTree("{\"title\":\"资源\",\"content\":\"内容生成中...\"}");
+                return objectMapper.readTree("{\"title\":\"璧勬簮\",\"content\":\"鍐呭鐢熸垚涓?..\"}");
             } catch (Exception ex) {
                 return null;
             }
@@ -142,11 +141,10 @@ public class GenAgent implements LearningAgent {
     }
 
     /**
-     * 为指定节点生成单个资源
-     * 优先使用预存资源，没有再调LLM
+     * 涓烘寚瀹氳妭鐐圭敓鎴愬崟涓祫婧?     * 浼樺厛浣跨敤棰勫瓨璧勬簮锛屾病鏈夊啀璋僉LM
      */
     public AgentOutput generateResource(String nodeTitle, String resourceType, String kpInfo, Long pathNodeId) {
-        // 1. 先检查是否有预存资源（根据标题匹配）
+        // 1. 鍏堟鏌ユ槸鍚︽湁棰勫瓨璧勬簮锛堟牴鎹爣棰樺尮閰嶏級
         GeneratedResource existing = findExistingResourceByTitle(nodeTitle, resourceType);
         if (existing != null) {
             log.info("Using pre-existing resource for node: {}, type: {}", nodeTitle, resourceType);
@@ -154,19 +152,19 @@ public class GenAgent implements LearningAgent {
             output.setAgentRole(getRole());
             output.setStatus("success");
             output.setStructuredData(existing.getContentJson());
-            output.setRawResponse("使用预存资源");
+            output.setRawResponse("浣跨敤棰勫瓨璧勬簮");
             return output;
         }
 
-        // 2. 没有预存资源，调LLM生成
+        // 2. 娌℃湁棰勫瓨璧勬簮锛岃皟LLM鐢熸垚
         log.info("Generating new resource for node: {}, type: {}", nodeTitle, resourceType);
         String typeDesc = switch (resourceType) {
-            case "document" -> "Markdown格式的讲解文档";
-            case "quiz" -> "3道练习题";
-            case "mindmap" -> "思维导图树形JSON";
+            case "document" -> "Markdown鏍煎紡鐨勮瑙ｆ枃妗?;
+            case "quiz" -> "3閬撶粌涔犻";
+            case "mindmap" -> "鎬濈淮瀵煎浘鏍戝舰JSON";
             default -> resourceType;
         };
-        String prompt = "请为以下节点生成" + typeDesc + "：\n节点：" + nodeTitle + "\n知识点：" + (kpInfo.isEmpty() ? "无" : kpInfo);
+        String prompt = "璇蜂负浠ヤ笅鑺傜偣鐢熸垚" + typeDesc + "锛歕n鑺傜偣锛? + nodeTitle + "\n鐭ヨ瘑鐐癸細" + (kpInfo.isEmpty() ? "鏃? : kpInfo);
 
         AgentInput input = new AgentInput();
         input.setUserMessage(prompt);
@@ -174,11 +172,11 @@ public class GenAgent implements LearningAgent {
     }
 
     /**
-     * 根据标题查找已存在的资源
+     * 鏍规嵁鏍囬鏌ユ壘宸插瓨鍦ㄧ殑璧勬簮
      */
     private GeneratedResource findExistingResourceByTitle(String nodeTitle, String resourceType) {
         try {
-            // 使用模糊匹配标题
+            // 浣跨敤妯＄硦鍖归厤鏍囬
             List<GeneratedResource> resources = generatedResourceService.getResourcesByTitle(nodeTitle);
             return resources.stream()
                     .filter(r -> resourceType.equals(r.getResourceType()))
@@ -191,7 +189,7 @@ public class GenAgent implements LearningAgent {
     }
 
     /**
-     * 解析资源报告
+     * 瑙ｆ瀽璧勬簮鎶ュ憡
      */
     public ResourceReport parseResourceReport(AgentOutput output, Long pathNodeId, String resourceType) {
         try {
@@ -210,21 +208,21 @@ public class GenAgent implements LearningAgent {
     }
 
     /**
-     * 从响应中提取JSON
+     * 浠庡搷搴斾腑鎻愬彇JSON
      */
     private String extractJson(String text) {
         if (text == null || text.isEmpty()) {
             return text;
         }
         
-        // 尝试从 ```json ... ``` 代码块中提取
+        // 灏濊瘯浠?```json ... ``` 浠ｇ爜鍧椾腑鎻愬彇
         int s = text.indexOf("```json");
         int e = text.indexOf("```", s + 7);
         if (s != -1 && e > s) {
             return text.substring(s + 7, e).trim();
         }
         
-        // 尝试从 ``` ... ``` 代码块中提取
+        // 灏濊瘯浠?``` ... ``` 浠ｇ爜鍧椾腑鎻愬彇
         s = text.indexOf("```");
         e = text.indexOf("```", s + 3);
         if (s != -1 && e > s) {
@@ -234,11 +232,9 @@ public class GenAgent implements LearningAgent {
             }
         }
         
-        // 尝试找到完整的JSON对象（从第一个{到最后一个}）
-        s = text.indexOf("{");
+        // 灏濊瘯鎵惧埌瀹屾暣鐨凧SON瀵硅薄锛堜粠绗竴涓獅鍒版渶鍚庝竴涓獇锛?        s = text.indexOf("{");
         if (s != -1) {
-            // 找到匹配的结束括号
-            int depth = 0;
+            // 鎵惧埌鍖归厤鐨勭粨鏉熸嫭鍙?            int depth = 0;
             for (int i = s; i < text.length(); i++) {
                 char c = text.charAt(i);
                 if (c == '{') depth++;
@@ -249,7 +245,7 @@ public class GenAgent implements LearningAgent {
             }
         }
         
-        // 如果都没有找到，返回原文
+        // 濡傛灉閮芥病鏈夋壘鍒帮紝杩斿洖鍘熸枃
         return text;
     }
 }

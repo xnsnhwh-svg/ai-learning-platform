@@ -1,11 +1,10 @@
-package com.exam.service.agent.model;
+﻿package com.exam.service.agent.model;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * Agent上下文信息
- */
+ * Agent涓婁笅鏂囦俊鎭? */
 public class AgentContext {
 
     private Long sessionId;
@@ -55,8 +54,7 @@ public class AgentContext {
     }
 
     /**
-     * 全局上下文 - 跨Agent共享的信息
-     */
+     * 鍏ㄥ眬涓婁笅鏂?- 璺ˋgent鍏变韩鐨勪俊鎭?     */
     public static class GlobalContext {
         private String userProfileSummary;
         private String knowledgeDomain;
@@ -88,8 +86,7 @@ public class AgentContext {
     }
 
     /**
-     * 局部上下文 - 当前Agent特定的信息
-     */
+     * 灞€閮ㄤ笂涓嬫枃 - 褰撳墠Agent鐗瑰畾鐨勪俊鎭?     */
     public static class LocalContext {
         private String specificInstruction;
         private List<String> scope;

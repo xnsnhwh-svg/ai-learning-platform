@@ -1,5 +1,5 @@
 <template>
-  <div class="video-manage-container">
+  <div class="video-manage-container page-enter">
     <div class="search-bar">
       <el-row :gutter="20">
         <el-col :span="6">

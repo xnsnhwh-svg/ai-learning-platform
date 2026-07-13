@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 
 export default defineConfig({
+  appType: 'spa',
   plugins: [vue()],
   resolve: {
     alias: {
@@ -14,8 +15,8 @@ export default defineConfig({
     assetsDir: 'static' // 静态资源目录
   },
   server: {
-    port: 3080, // 前端服务端口
-    //现在配置的绝对地址，不走代理！后台处理跨域
+    host: '0.0.0.0',
+    port: 3001, // 前端服务端口
     proxy: {
       '/api': {
         target: 'http://localhost:8080', // 后端服务地址

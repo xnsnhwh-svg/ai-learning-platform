@@ -1,4 +1,4 @@
-package com.exam.service.agent;
+﻿package com.exam.service.agent;
 
 import com.exam.entity.LearningPath;
 import com.exam.entity.PathNode;
@@ -12,32 +12,26 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 合成引擎
- * 负责聚合路径节点和生成的资源，去重并格式化为前端友好的结构
- */
+ * 鍚堟垚寮曟搸
+ * 璐熻矗鑱氬悎璺緞鑺傜偣鍜岀敓鎴愮殑璧勬簮锛屽幓閲嶅苟鏍煎紡鍖栦负鍓嶇鍙嬪ソ鐨勭粨鏋? */
 @Component
 public class SynthesisEngine {
 
     private static final Logger log = LoggerFactory.getLogger(SynthesisEngine.class);
 
     /**
-     * 合成学习包
-     * @param path 学习路径
-     * @param resources 生成的资源列表
-     * @return 合成后的学习包
-     */
+     * 鍚堟垚瀛︿範鍖?     * @param path 瀛︿範璺緞
+     * @param resources 鐢熸垚鐨勮祫婧愬垪琛?     * @return 鍚堟垚鍚庣殑瀛︿範鍖?     */
     public LearningPackage synthesize(LearningPath path, List<ResourceReport> resources) {
         LearningPackage pkg = new LearningPackage();
         pkg.setPathId(path.getId());
-        pkg.setTitle("学习计划");
+        pkg.setTitle("瀛︿範璁″垝");
         pkg.setCourseId(path.getCourseId());
 
-        // 按路径节点分组资源
-        Map<Long, List<ResourceReport>> resourcesByNode = resources.stream()
+        // 鎸夎矾寰勮妭鐐瑰垎缁勮祫婧?        Map<Long, List<ResourceReport>> resourcesByNode = resources.stream()
                 .collect(Collectors.groupingBy(ResourceReport::getPathNodeId));
 
-        // 构建节点包
-        List<NodePackage> nodePackages = new ArrayList<>();
+        // 鏋勫缓鑺傜偣鍖?        List<NodePackage> nodePackages = new ArrayList<>();
         if (path.getNodes() != null) {
             for (PathNode node : path.getNodes()) {
                 NodePackage nodePkg = new NodePackage();
@@ -48,8 +42,7 @@ public class SynthesisEngine {
                 nodePkg.setReason(node.getReason());
                 nodePkg.setStatus(node.getStatus());
 
-                // 获取该节点的资源并去重
-                List<ResourceReport> nodeResources = resourcesByNode.getOrDefault(node.getId(), List.of());
+                // 鑾峰彇璇ヨ妭鐐圭殑璧勬簮骞跺幓閲?                List<ResourceReport> nodeResources = resourcesByNode.getOrDefault(node.getId(), List.of());
                 List<ResourceReport> deduplicatedResources = deduplicateResources(nodeResources);
                 nodePkg.setResources(deduplicatedResources);
 
@@ -65,8 +58,8 @@ public class SynthesisEngine {
     }
 
     /**
-     * 资源去重
-     * 同一知识点可能被多次生成资源，只保留最新的
+     * 璧勬簮鍘婚噸
+     * 鍚屼竴鐭ヨ瘑鐐瑰彲鑳借澶氭鐢熸垚璧勬簮锛屽彧淇濈暀鏈€鏂扮殑
      */
     private List<ResourceReport> deduplicateResources(List<ResourceReport> resources) {
         Map<String, ResourceReport> uniqueResources = new LinkedHashMap<>();
@@ -81,7 +74,7 @@ public class SynthesisEngine {
     }
 
     /**
-     * 统计去重后的资源数量
+     * 缁熻鍘婚噸鍚庣殑璧勬簮鏁伴噺
      */
     private int countDeduplicatedResources(List<ResourceReport> resources) {
         Set<String> uniqueKeys = new HashSet<>();
@@ -94,8 +87,7 @@ public class SynthesisEngine {
     }
 
     /**
-     * 学习包
-     */
+     * 瀛︿範鍖?     */
     public static class LearningPackage {
         private Long pathId;
         private String title;
@@ -154,8 +146,7 @@ public class SynthesisEngine {
     }
 
     /**
-     * 节点包
-     */
+     * 鑺傜偣鍖?     */
     public static class NodePackage {
         private Long nodeId;
         private String title;

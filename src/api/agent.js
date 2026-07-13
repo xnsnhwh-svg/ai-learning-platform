@@ -1,4 +1,5 @@
 import { useAgentStore } from '@/stores/agent'
+import request from '../utils/request'
 
 export async function sendMessage(userMessage) {
   const store = useAgentStore()
@@ -155,5 +156,19 @@ export async function fetchSessionMessages(sessionId) {
 export async function updateNodeStatus(nodeId, status) {
   await fetch(`/api/learning-path/nodes/${nodeId}/status?status=${status}`, {
     method: 'PUT'
+  })
+}
+
+/**
+ * 从诊断问卷创建画像 + 完整学习路径
+ * @param {Object} params
+ * @param {number} params.userId
+ * @param {string} params.diagnosticText - 问卷答案拼成的文本
+ */
+export function profileFromDiagnostic(params) {
+  return request({
+    url: '/api/agent/profile-from-diagnostic',
+    method: 'post',
+    data: params
   })
 }

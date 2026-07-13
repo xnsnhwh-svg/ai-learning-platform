@@ -1,4 +1,4 @@
-package com.exam.service.agent;
+﻿package com.exam.service.agent;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -17,9 +17,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 画像构建Agent
- * 负责通过对话了解用户学习水平，构建学习画像
- */
+ * 鐢诲儚鏋勫缓Agent
+ * 璐熻矗閫氳繃瀵硅瘽浜嗚В鐢ㄦ埛瀛︿範姘村钩锛屾瀯寤哄涔犵敾鍍? */
 @Component
 public class ProfileAgent implements LearningAgent {
 
@@ -30,14 +29,14 @@ public class ProfileAgent implements LearningAgent {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String SYSTEM_PROMPT = "你是一个学习画像构建助手。通过对话了解用户的学习水平和偏好。\n" +
-            "规则（必须严格遵守）：\n" +
-            "1. 每次只问一个问题\n" +
-            "2. 总共只问恰好3个问题，不能多也不能少\n" +
-            "3. 前2个问题返回状态profiling，第3个问题用户回答后，第4次调用时必须返回status:complete\n" +
-            "4. 需要了解：编程基础、学习目标、每周学习时长\n" +
-            "还在提问时返回：{\"status\":\"profiling\",\"type\":\"question\",\"text\":\"问题\",\"options\":[\"选项1\",\"选项2\",\"选项3\",\"选项4\"]}\n" +
-            "画像完成时（第3个问题回答后）必须返回：{\"status\":\"complete\",\"profile\":{\"level\":\"初级|中级|高级\",\"knowledge_map\":{\"java_basics\":{\"level\":0.5,\"label\":\"Java基础\"}},\"cognitive_style\":{\"type\":\"depth_first\",\"avg_session_min\":30},\"weak_points\":[{\"topic\":\"薄弱点\",\"level\":0.3}],\"learning_goal\":{\"target\":\"学习目标\"}}}";
+    private static final String SYSTEM_PROMPT = "浣犳槸涓€涓涔犵敾鍍忔瀯寤哄姪鎵嬨€傞€氳繃瀵硅瘽浜嗚В鐢ㄦ埛鐨勫涔犳按骞冲拰鍋忓ソ銆俓n" +
+            "瑙勫垯锛堝繀椤讳弗鏍奸伒瀹堬級锛歕n" +
+            "1. 姣忔鍙棶涓€涓棶棰榎n" +
+            "2. 鎬诲叡鍙棶鎭板ソ3涓棶棰橈紝涓嶈兘澶氫篃涓嶈兘灏慭n" +
+            "3. 鍓?涓棶棰樿繑鍥炵姸鎬乸rofiling锛岀3涓棶棰樼敤鎴峰洖绛斿悗锛岀4娆¤皟鐢ㄦ椂蹇呴』杩斿洖status:complete\n" +
+            "4. 闇€瑕佷簡瑙ｏ細缂栫▼鍩虹銆佸涔犵洰鏍囥€佹瘡鍛ㄥ涔犳椂闀縗n" +
+            "杩樺湪鎻愰棶鏃惰繑鍥烇細{\"status\":\"profiling\",\"type\":\"question\",\"text\":\"闂\",\"options\":[\"閫夐」1\",\"閫夐」2\",\"閫夐」3\",\"閫夐」4\"]}\n" +
+            "鐢诲儚瀹屾垚鏃讹紙绗?涓棶棰樺洖绛斿悗锛夊繀椤昏繑鍥烇細{\"status\":\"complete\",\"profile\":{\"level\":\"鍒濈骇|涓骇|楂樼骇\",\"knowledge_map\":{\"java_basics\":{\"level\":0.5,\"label\":\"Java鍩虹\"}},\"cognitive_style\":{\"type\":\"depth_first\",\"avg_session_min\":30},\"weak_points\":[{\"topic\":\"钖勫急鐐筡",\"level\":0.3}],\"learning_goal\":{\"target\":\"瀛︿範鐩爣\"}}}";
 
     @Override
     public String getRole() {
@@ -61,7 +60,7 @@ public class ProfileAgent implements LearningAgent {
             String jsonStr = extractJson(response);
             log.info("ProfileAgent extracted JSON: {}", jsonStr);
 
-            // 验证提取的内容是有效的JSON
+            // 楠岃瘉鎻愬彇鐨勫唴瀹规槸鏈夋晥鐨凧SON
             JSONObject parsed;
             JsonNode structuredData;
             try {
@@ -69,8 +68,7 @@ public class ProfileAgent implements LearningAgent {
                 structuredData = objectMapper.readTree(jsonStr);
             } catch (Exception jsonEx) {
                 log.warn("Extracted content is not valid JSON, attempting to build profile from text response");
-                // 如果不是有效JSON，尝试从文本中构建画像
-                return buildFallbackProfile(response);
+                // 濡傛灉涓嶆槸鏈夋晥JSON锛屽皾璇曚粠鏂囨湰涓瀯寤虹敾鍍?                return buildFallbackProfile(response);
             }
 
             boolean isComplete = "complete".equals(parsed.getString("status"));
@@ -87,33 +85,31 @@ public class ProfileAgent implements LearningAgent {
             AgentOutput output = new AgentOutput();
             output.setAgentRole(getRole());
             output.setStatus("error");
-            output.setRawResponse("画像构建失败: " + e.getMessage());
+            output.setRawResponse("鐢诲儚鏋勫缓澶辫触: " + e.getMessage());
             return output;
         }
     }
 
     /**
-     * 当JSON解析失败时，从文本响应构建备用画像
-     */
+     * 褰揓SON瑙ｆ瀽澶辫触鏃讹紝浠庢枃鏈搷搴旀瀯寤哄鐢ㄧ敾鍍?     */
     private AgentOutput buildFallbackProfile(String response) {
         log.info("Building fallback profile from response");
         
-        // 检测是否包含完成标志
-        boolean isComplete = response.contains("complete") || response.contains("完成") || response.contains("画像");
+        // 妫€娴嬫槸鍚﹀寘鍚畬鎴愭爣蹇?        boolean isComplete = response.contains("complete") || response.contains("瀹屾垚") || response.contains("鐢诲儚");
         
         AgentOutput output = new AgentOutput();
         output.setAgentRole(getRole());
         
         if (isComplete) {
-            // 构建一个默认的完成画像
+            // 鏋勫缓涓€涓粯璁ょ殑瀹屾垚鐢诲儚
             JSONObject forcedProfile = new JSONObject();
             forcedProfile.put("status", "complete");
             JSONObject profileData = new JSONObject();
-            profileData.put("level", "初级");
+            profileData.put("level", "鍒濈骇");
             JSONObject knowledgeMap = new JSONObject();
             JSONObject javaBasics = new JSONObject();
             javaBasics.put("level", 0.5);
-            javaBasics.put("label", "Java基础");
+            javaBasics.put("label", "Java鍩虹");
             knowledgeMap.put("java_basics", javaBasics);
             profileData.put("knowledge_map", knowledgeMap);
             JSONObject cognitiveStyle = new JSONObject();
@@ -122,7 +118,7 @@ public class ProfileAgent implements LearningAgent {
             profileData.put("cognitive_style", cognitiveStyle);
             profileData.put("weak_points", new JSONArray());
             JSONObject learningGoal = new JSONObject();
-            learningGoal.put("target", "学习Java");
+            learningGoal.put("target", "瀛︿範Java");
             profileData.put("learning_goal", learningGoal);
             forcedProfile.put("profile", profileData);
             
@@ -134,16 +130,15 @@ public class ProfileAgent implements LearningAgent {
             }
             output.setRawResponse(forcedProfile.toJSONString());
         } else {
-            // 继续提问状态
-            JSONObject questionJson = new JSONObject();
+            // 缁х画鎻愰棶鐘舵€?            JSONObject questionJson = new JSONObject();
             questionJson.put("status", "profiling");
             questionJson.put("type", "question");
-            questionJson.put("text", response.length() > 100 ? "请告诉我您的学习基础和目标" : response);
+            questionJson.put("text", response.length() > 100 ? "璇峰憡璇夋垜鎮ㄧ殑瀛︿範鍩虹鍜岀洰鏍? : response);
             JSONArray options = new JSONArray();
-            options.add("零基础");
-            options.add("有编程基础");
-            options.add("有一定经验");
-            options.add("高级开发者");
+            options.add("闆跺熀纭€");
+            options.add("鏈夌紪绋嬪熀纭€");
+            options.add("鏈変竴瀹氱粡楠?);
+            options.add("楂樼骇寮€鍙戣€?);
             questionJson.put("options", options);
             
             output.setStatus("profiling");
@@ -159,17 +154,16 @@ public class ProfileAgent implements LearningAgent {
     }
 
     /**
-     * 构建强制完成的画像（当对话轮次超限时使用）
-     */
+     * 鏋勫缓寮哄埗瀹屾垚鐨勭敾鍍忥紙褰撳璇濊疆娆¤秴闄愭椂浣跨敤锛?     */
     public AgentOutput buildForcedProfile() {
         JSONObject forcedProfile = new JSONObject();
         forcedProfile.put("status", "complete");
         JSONObject profileData = new JSONObject();
-        profileData.put("level", "初级");
+        profileData.put("level", "鍒濈骇");
         JSONObject knowledgeMap = new JSONObject();
         JSONObject javaBasics = new JSONObject();
         javaBasics.put("level", 0.5);
-        javaBasics.put("label", "Java基础");
+        javaBasics.put("label", "Java鍩虹");
         knowledgeMap.put("java_basics", javaBasics);
         profileData.put("knowledge_map", knowledgeMap);
         JSONObject cognitiveStyle = new JSONObject();
@@ -178,7 +172,7 @@ public class ProfileAgent implements LearningAgent {
         profileData.put("cognitive_style", cognitiveStyle);
         profileData.put("weak_points", new JSONArray());
         JSONObject learningGoal = new JSONObject();
-        learningGoal.put("target", "学习Java");
+        learningGoal.put("target", "瀛︿範Java");
         profileData.put("learning_goal", learningGoal);
         forcedProfile.put("profile", profileData);
 
@@ -195,21 +189,21 @@ public class ProfileAgent implements LearningAgent {
     }
 
     /**
-     * 从响应中提取JSON
+     * 浠庡搷搴斾腑鎻愬彇JSON
      */
     private String extractJson(String text) {
         if (text == null || text.isEmpty()) {
             return text;
         }
         
-        // 尝试从 ```json ... ``` 代码块中提取
+        // 灏濊瘯浠?```json ... ``` 浠ｇ爜鍧椾腑鎻愬彇
         int s = text.indexOf("```json");
         int e = text.indexOf("```", s + 7);
         if (s != -1 && e > s) {
             return text.substring(s + 7, e).trim();
         }
         
-        // 尝试从 ``` ... ``` 代码块中提取
+        // 灏濊瘯浠?``` ... ``` 浠ｇ爜鍧椾腑鎻愬彇
         s = text.indexOf("```");
         e = text.indexOf("```", s + 3);
         if (s != -1 && e > s) {
@@ -219,11 +213,9 @@ public class ProfileAgent implements LearningAgent {
             }
         }
         
-        // 尝试找到完整的JSON对象（从第一个{到最后一个}）
-        s = text.indexOf("{");
+        // 灏濊瘯鎵惧埌瀹屾暣鐨凧SON瀵硅薄锛堜粠绗竴涓獅鍒版渶鍚庝竴涓獇锛?        s = text.indexOf("{");
         if (s != -1) {
-            // 找到匹配的结束括号
-            int depth = 0;
+            // 鎵惧埌鍖归厤鐨勭粨鏉熸嫭鍙?            int depth = 0;
             for (int i = s; i < text.length(); i++) {
                 char c = text.charAt(i);
                 if (c == '{') depth++;
@@ -234,7 +226,7 @@ public class ProfileAgent implements LearningAgent {
             }
         }
         
-        // 如果都没有找到，返回原文
+        // 濡傛灉閮芥病鏈夋壘鍒帮紝杩斿洖鍘熸枃
         return text;
     }
 }

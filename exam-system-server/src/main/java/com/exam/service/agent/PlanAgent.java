@@ -1,4 +1,4 @@
-package com.exam.service.agent;
+﻿package com.exam.service.agent;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -19,9 +19,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 路径规划Agent
- * 负责根据用户画像和知识图谱生成学习路径
- * 使用拓扑排序算法生成基础路径，再用LLM做个性化调整
+ * 璺緞瑙勫垝Agent
+ * 璐熻矗鏍规嵁鐢ㄦ埛鐢诲儚鍜岀煡璇嗗浘璋辩敓鎴愬涔犺矾寰? * 浣跨敤鎷撴墤鎺掑簭绠楁硶鐢熸垚鍩虹璺緞锛屽啀鐢↙LM鍋氫釜鎬у寲璋冩暣
  */
 @Component
 public class PlanAgent implements LearningAgent {
@@ -36,13 +35,13 @@ public class PlanAgent implements LearningAgent {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String SYSTEM_PROMPT = "你是学习路径规划助手。根据用户画像和知识图谱生成个性化的学习路径。\n" +
-            "规则：\n" +
-            "1. 根据用户水平选择合适的起点\n" +
-            "2. 按依赖关系排序\n" +
-            "3. 每个节点20-50分钟\n" +
-            "4. 最多10个节点\n" +
-            "返回JSON：{\"title\":\"路径标题\",\"courseId\":1,\"nodes\":[{\"order\":1,\"title\":\"标题\",\"type\":\"review|new_learn|reinforce\",\"estimatedMinutes\":30,\"reason\":\"原因\",\"knowledgePointIds\":[1,2]}]}";
+    private static final String SYSTEM_PROMPT = "浣犳槸瀛︿範璺緞瑙勫垝鍔╂墜銆傛牴鎹敤鎴风敾鍍忓拰鐭ヨ瘑鍥捐氨鐢熸垚涓€у寲鐨勫涔犺矾寰勩€俓n" +
+            "瑙勫垯锛歕n" +
+            "1. 鏍规嵁鐢ㄦ埛姘村钩閫夋嫨鍚堥€傜殑璧风偣\n" +
+            "2. 鎸変緷璧栧叧绯绘帓搴廫n" +
+            "3. 姣忎釜鑺傜偣20-50鍒嗛挓\n" +
+            "4. 鏈€澶?0涓妭鐐筡n" +
+            "杩斿洖JSON锛歿\"title\":\"璺緞鏍囬\",\"courseId\":1,\"nodes\":[{\"order\":1,\"title\":\"鏍囬\",\"type\":\"review|new_learn|reinforce\",\"estimatedMinutes\":30,\"reason\":\"鍘熷洜\",\"knowledgePointIds\":[1,2]}]}";
 
     @Override
     public String getRole() {
@@ -57,33 +56,33 @@ public class PlanAgent implements LearningAgent {
     @Override
     public AgentOutput execute(AgentInput input) {
         try {
-            // 方案1：使用拓扑排序算法生成基础路径
+            // 鏂规1锛氫娇鐢ㄦ嫇鎵戞帓搴忕畻娉曠敓鎴愬熀纭€璺緞
             AgentOutput algorithmResult = generatePathByAlgorithm(input);
             if (algorithmResult != null && "success".equals(algorithmResult.getStatus())) {
                 return algorithmResult;
             }
 
-            // 方案2：降级使用LLM生成
+            // 鏂规2锛氶檷绾т娇鐢↙LM鐢熸垚
             return generatePathByLLM(input);
         } catch (Exception e) {
             log.error("PlanAgent execution failed", e);
             AgentOutput output = new AgentOutput();
             output.setAgentRole(getRole());
             output.setStatus("error");
-            output.setRawResponse("路径规划失败: " + e.getMessage());
+            output.setRawResponse("璺緞瑙勫垝澶辫触: " + e.getMessage());
             return output;
         }
     }
 
     /**
-     * 使用拓扑排序算法生成基础路径
+     * 浣跨敤鎷撴墤鎺掑簭绠楁硶鐢熸垚鍩虹璺緞
      */
     private AgentOutput generatePathByAlgorithm(AgentInput input) {
         try {
             AgentContext ctx = input.getContext();
-            Long courseId = 1L; // 默认课程
+            Long courseId = 1L; // 榛樿璇剧▼
 
-            // 1. 获取知识图谱
+            // 1. 鑾峰彇鐭ヨ瘑鍥捐氨
             Map<String, Object> graph = knowledgeService.getKnowledgeGraph(courseId);
             List<Map<String, Object>> points = (List<Map<String, Object>>) graph.get("points");
             List<Map<String, String>> edges = (List<Map<String, String>>) graph.get("edges");
@@ -92,8 +91,7 @@ public class PlanAgent implements LearningAgent {
                 return null;
             }
 
-            // 2. 构建邻接表和入度表
-            Map<Long, List<Long>> adjacencyList = new HashMap<>();
+            // 2. 鏋勫缓閭绘帴琛ㄥ拰鍏ュ害琛?            Map<Long, List<Long>> adjacencyList = new HashMap<>();
             Map<Long, Integer> inDegree = new HashMap<>();
             Map<Long, Map<String, Object>> pointMap = new HashMap<>();
 
@@ -104,13 +102,10 @@ public class PlanAgent implements LearningAgent {
                 inDegree.put(id, 0);
             }
 
-            // 3. 构建图
-            for (Map<String, String> edge : edges) {
-                // 这里需要根据code查找id，简化处理
-                // 实际应该维护code到id的映射
-            }
+            // 3. 鏋勫缓鍥?            for (Map<String, String> edge : edges) {
+                // 杩欓噷闇€瑕佹牴鎹甤ode鏌ユ壘id锛岀畝鍖栧鐞?                // 瀹為檯搴旇缁存姢code鍒癷d鐨勬槧灏?            }
 
-            // 4. 拓扑排序
+            // 4. 鎷撴墤鎺掑簭
             Queue<Long> queue = new LinkedList<>();
             for (Map.Entry<Long, Integer> entry : inDegree.entrySet()) {
                 if (entry.getValue() == 0) {
@@ -131,8 +126,7 @@ public class PlanAgent implements LearningAgent {
                 }
             }
 
-            // 5. 按难度分组
-            List<Map<String, Object>> l1Points = new ArrayList<>();
+            // 5. 鎸夐毦搴﹀垎缁?            List<Map<String, Object>> l1Points = new ArrayList<>();
             List<Map<String, Object>> l2Points = new ArrayList<>();
             List<Map<String, Object>> l3Points = new ArrayList<>();
 
@@ -148,20 +142,19 @@ public class PlanAgent implements LearningAgent {
                 }
             }
 
-            // 6. 合并并限制节点数
+            // 6. 鍚堝苟骞堕檺鍒惰妭鐐规暟
             List<Map<String, Object>> allPoints = new ArrayList<>();
             allPoints.addAll(l1Points);
             allPoints.addAll(l2Points);
             allPoints.addAll(l3Points);
 
-            // 限制最多10个节点
-            if (allPoints.size() > 10) {
+            // 闄愬埗鏈€澶?0涓妭鐐?            if (allPoints.size() > 10) {
                 allPoints = allPoints.subList(0, 10);
             }
 
-            // 7. 构建路径报告
+            // 7. 鏋勫缓璺緞鎶ュ憡
             PlanReport report = new PlanReport();
-            report.setTitle("Java学习路径");
+            report.setTitle("Java瀛︿範璺緞");
             report.setCourseId(courseId);
 
             List<PlanReport.PathNodeInfo> nodes = new ArrayList<>();
@@ -172,13 +165,13 @@ public class PlanAgent implements LearningAgent {
                 node.setTitle((String) point.get("name"));
                 node.setType("new_learn");
                 node.setEstimatedMinutes(30);
-                node.setReason("知识点：" + point.get("name"));
+                node.setReason("鐭ヨ瘑鐐癸細" + point.get("name"));
                 node.setKnowledgePointIds(List.of(((Number) point.get("id")).longValue()));
                 nodes.add(node);
             }
             report.setNodes(nodes);
 
-            // 8. 返回结果
+            // 8. 杩斿洖缁撴灉
             AgentOutput output = new AgentOutput();
             output.setAgentRole(getRole());
             output.setStatus("success");
@@ -194,7 +187,7 @@ public class PlanAgent implements LearningAgent {
     }
 
     /**
-     * 使用LLM生成路径（降级方案）
+     * 浣跨敤LLM鐢熸垚璺緞锛堥檷绾ф柟妗堬級
      */
     private AgentOutput generatePathByLLM(AgentInput input) {
         try {
@@ -221,13 +214,13 @@ public class PlanAgent implements LearningAgent {
             AgentOutput output = new AgentOutput();
             output.setAgentRole(getRole());
             output.setStatus("error");
-            output.setRawResponse("路径规划失败: " + e.getMessage());
+            output.setRawResponse("璺緞瑙勫垝澶辫触: " + e.getMessage());
             return output;
         }
     }
 
     /**
-     * 解析路径报告
+     * 瑙ｆ瀽璺緞鎶ュ憡
      */
     public PlanReport parsePlanReport(AgentOutput output) {
         try {
@@ -240,14 +233,14 @@ public class PlanAgent implements LearningAgent {
     }
 
     /**
-     * 构建包含画像和知识图谱的用户提示
+     * 鏋勫缓鍖呭惈鐢诲儚鍜岀煡璇嗗浘璋辩殑鐢ㄦ埛鎻愮ず
      */
     public String buildPromptWithProfileAndGraph(String profileJson, String graphJson) {
-        return "用户画像：\n" + profileJson + "\n\n知识图谱：\n" + graphJson;
+        return "鐢ㄦ埛鐢诲儚锛歕n" + profileJson + "\n\n鐭ヨ瘑鍥捐氨锛歕n" + graphJson;
     }
 
     /**
-     * 从响应中提取JSON
+     * 浠庡搷搴斾腑鎻愬彇JSON
      */
     private String extractJson(String text) {
         int s = text.indexOf("```json"), e = text.lastIndexOf("```");

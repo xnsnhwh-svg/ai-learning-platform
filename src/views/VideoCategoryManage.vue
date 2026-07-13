@@ -1,5 +1,5 @@
 <template>
-  <div class="video-category-manage-container">
+  <div class="video-category-manage-container page-enter">
     <div class="action-bar">
       <el-button type="primary" @click="showAddDialog" icon="Plus">添加分类</el-button>
       <el-button @click="getCategoryList" icon="Refresh">刷新列表</el-button>

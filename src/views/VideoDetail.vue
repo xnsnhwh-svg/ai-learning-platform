@@ -1,5 +1,5 @@
 <template>
-  <div class="video-detail-page">
+  <div class="video-detail-page page-enter">
     <!-- 头部区域，返回按钮独立，主标题真正水平+垂直居中 -->
     <div class="video-detail-header">
       <!-- 返回按钮，绝对定位，左上角 -->

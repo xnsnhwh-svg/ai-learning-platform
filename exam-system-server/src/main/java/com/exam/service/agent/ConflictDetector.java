@@ -1,4 +1,4 @@
-package com.exam.service.agent;
+﻿package com.exam.service.agent;
 
 import com.exam.service.agent.model.ConflictResult;
 import com.exam.service.agent.model.PlanReport;
@@ -13,21 +13,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 冲突检测器
- * 负责检测路径规划和资源生成之间的不一致
- */
+ * 鍐茬獊妫€娴嬪櫒
+ * 璐熻矗妫€娴嬭矾寰勮鍒掑拰璧勬簮鐢熸垚涔嬮棿鐨勪笉涓€鑷? */
 @Component
 public class ConflictDetector {
 
     private static final Logger log = LoggerFactory.getLogger(ConflictDetector.class);
 
     /**
-     * 检测冲突
-     * @param plan 路径规划报告
-     * @param resources 生成的资源列表
-     * @param userLevel 用户水平 (L1/L2/L3)
-     * @return 冲突检测结果
-     */
+     * 妫€娴嬪啿绐?     * @param plan 璺緞瑙勫垝鎶ュ憡
+     * @param resources 鐢熸垚鐨勮祫婧愬垪琛?     * @param userLevel 鐢ㄦ埛姘村钩 (L1/L2/L3)
+     * @return 鍐茬獊妫€娴嬬粨鏋?     */
     public ConflictResult detect(PlanReport plan, List<ResourceReport> resources, String userLevel) {
         List<String> missingCoverage = detectMissingCoverage(plan, resources);
         List<String> difficultyMismatch = detectDifficultyMismatch(resources, userLevel);
@@ -43,25 +39,24 @@ public class ConflictDetector {
     }
 
     /**
-     * 检测覆盖缺失
-     * PlanAgent规划的路径节点，GenAgent是否每个都生成了资源
+     * 妫€娴嬭鐩栫己澶?     * PlanAgent瑙勫垝鐨勮矾寰勮妭鐐癸紝GenAgent鏄惁姣忎釜閮界敓鎴愪簡璧勬簮
      */
     private List<String> detectMissingCoverage(PlanReport plan, List<ResourceReport> resources) {
         if (plan == null || plan.getNodes() == null) {
             return List.of();
         }
 
-        // 获取所有规划的知识点ID
+        // 鑾峰彇鎵€鏈夎鍒掔殑鐭ヨ瘑鐐笽D
         Set<Long> plannedKpIds = plan.getAllKnowledgePointIds().stream()
                 .collect(Collectors.toSet());
 
-        // 获取已生成资源的知识点ID
+        // 鑾峰彇宸茬敓鎴愯祫婧愮殑鐭ヨ瘑鐐笽D
         Set<Long> generatedKpIds = resources.stream()
                 .filter(r -> r.getKnowledgePointId() != null)
                 .map(ResourceReport::getKnowledgePointId)
                 .collect(Collectors.toSet());
 
-        // 找出缺失的知识点
+        // 鎵惧嚭缂哄け鐨勭煡璇嗙偣
         List<String> missing = new ArrayList<>();
         for (Long kpId : plannedKpIds) {
             if (!generatedKpIds.contains(kpId)) {
@@ -73,8 +68,8 @@ public class ConflictDetector {
     }
 
     /**
-     * 检测难度不匹配
-     * 用户水平是L1，但生成的资源标了L3
+     * 妫€娴嬮毦搴︿笉鍖归厤
+     * 鐢ㄦ埛姘村钩鏄疞1锛屼絾鐢熸垚鐨勮祫婧愭爣浜哃3
      */
     private List<String> detectDifficultyMismatch(List<ResourceReport> resources, String userLevel) {
         if (userLevel == null || resources == null) {
@@ -87,9 +82,8 @@ public class ConflictDetector {
         for (ResourceReport resource : resources) {
             if (resource.getDifficulty() != null) {
                 int resourceLevel = parseLevel(resource.getDifficulty());
-                // 如果资源难度超过用户水平2级以上，认为不匹配
-                if (resourceLevel - userLevelNum >= 2) {
-                    mismatched.add(resource.getTitle() + " (难度:" + resource.getDifficulty() + ")");
+                // 濡傛灉璧勬簮闅惧害瓒呰繃鐢ㄦ埛姘村钩2绾т互涓婏紝璁や负涓嶅尮閰?                if (resourceLevel - userLevelNum >= 2) {
+                    mismatched.add(resource.getTitle() + " (闅惧害:" + resource.getDifficulty() + ")");
                 }
             }
         }
@@ -98,21 +92,20 @@ public class ConflictDetector {
     }
 
     /**
-     * 解析难度级别
+     * 瑙ｆ瀽闅惧害绾у埆
      */
     private int parseLevel(String level) {
         if (level == null) return 1;
         return switch (level.toUpperCase()) {
-            case "L1", "初级", "EASY" -> 1;
-            case "L2", "中级", "MEDIUM" -> 2;
-            case "L3", "高级", "HARD" -> 3;
+            case "L1", "鍒濈骇", "EASY" -> 1;
+            case "L2", "涓骇", "MEDIUM" -> 2;
+            case "L3", "楂樼骇", "HARD" -> 3;
             default -> 1;
         };
     }
 
     /**
-     * 判断是否需要重新生成
-     */
+     * 鍒ゆ柇鏄惁闇€瑕侀噸鏂扮敓鎴?     */
     public boolean needRegenerate(ConflictResult result) {
         return result.isNeedRegenerate();
     }

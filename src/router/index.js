@@ -2,6 +2,18 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
+    path: '/login',
+    name: 'Login',
+    component: () => import('../views/auth/Login.vue'),
+    meta: { title: '登录', guest: true }
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('../views/auth/Register.vue'),
+    meta: { title: '注册', guest: true }
+  },
+  {
     path: '/',
     redirect: '/home'
   },
@@ -18,9 +30,21 @@ const routes = [
     meta: { title: 'AI学习助手' }
   },
   {
+    path: '/chat',
+    name: 'AiChat',
+    component: () => import('../views/AiChat.vue'),
+    meta: { title: '智能对话' }
+  },
+  {
     path: '/learning-paths',
     name: 'LearningPaths',
     component: () => import('../views/LearningPaths.vue'),
+    meta: { title: '学习路径' }
+  },
+  {
+    path: '/paths',
+    name: 'LearningPath',
+    component: () => import('../views/LearningPath.vue'),
     meta: { title: '学习路径' }
   },
   {
@@ -28,6 +52,18 @@ const routes = [
     name: 'Resources',
     component: () => import('../views/Resources.vue'),
     meta: { title: '生成资源' }
+  },
+  {
+    path: '/knowledge',
+    name: 'KnowledgeGraph',
+    component: () => import('../views/KnowledgeGraph.vue'),
+    meta: { title: '知识图谱' }
+  },
+  {
+    path: '/profile',
+    name: 'UserProfile',
+    component: () => import('../views/ProfilePage.vue'),
+    meta: { title: '用户画像' }
   },
   {
     path: '/videos',
@@ -81,7 +117,14 @@ router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title + ' - AI云学智训平台'
   }
-  next()
+  const token = localStorage.getItem('token')
+  if (to.meta.guest) {
+    next()
+  } else if (!token && to.path !== '/login' && to.path !== '/register') {
+    next('/login')
+  } else {
+    next()
+  }
 })
 
 router.afterEach((to) => {
